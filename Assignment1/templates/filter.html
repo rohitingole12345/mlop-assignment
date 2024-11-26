@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtered Iris Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h3 {
+            text-align: center;
+            color: #4682b4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        img {
+            max-width: 100%;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination a {
+            padding: 5px 10px;
+            margin: 0 5px;
+            text-decoration: none;
+            color: #4682b4;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .pagination a.active {
+            background-color: #4682b4;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Filter Iris Dataset</h1>
+        <form action="/filter" method="get">
+            <label for="species">Select Species:</label>
+            <select name="species" id="species">
+                <option value="">All Species</option>
+                <option value="Iris-setosa" {% if species == 'Iris-setosa' %} selected {% endif %}>Iris-setosa</option>
+                <option value="Iris-versicolor" {% if species == 'Iris-versicolor' %} selected {% endif %}>Iris-versicolor</option>
+                <option value="Iris-virginica" {% if species == 'Iris-virginica' %} selected {% endif %}>Iris-virginica</option>
+            </select>
+
+            <button type="submit">Filter</button>
+        </form>
+
+        <h3>Filtered Data</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sepal Length</th>
+                    <th>Sepal Width</th>
+                    <th>Petal Length</th>
+                    <th>Petal Width</th>
+                    <th>Species</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ paginated_data_html|safe }}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% for p in range(1, total_pages + 1) %}
+                <a href="/filter?species={{ species }}&page={{ p }}&page_size=10" 
+                   class="{{ 'active' if p == page else '' }}">{{ p }}</a>
+            {% endfor %}
+        </div>
+
+        <h3>Feature Distributions</h3>
+        <h1>
+            image_path</h1>
+        <img src="{{ image_path }}" alt="Feature Distributions">
+    </div>
+</body>
+</html>
